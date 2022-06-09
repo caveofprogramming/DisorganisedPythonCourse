@@ -1,3 +1,4 @@
-#!/usr/bin/python
+#!./venv/bin/python
 
-print("Hello World!")
+print("Hello Joe. How are you today?")
+print("Lovely weather today!")
