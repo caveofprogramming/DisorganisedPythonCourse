@@ -13,3 +13,16 @@ The program will ask for the password three times if necessary.
 After that, it exits.
 
 """
+
+PASSWORD = "hello123"
+
+
+for i in range(0, 3):
+    password = input("Enter your password > ")
+
+    if(password == PASSWORD):
+        print("Greetings Professor Falcon")
+        break
+    else:
+        print("Access denied")
+
