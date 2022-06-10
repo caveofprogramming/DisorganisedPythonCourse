@@ -19,6 +19,16 @@ If you're a student, you can only rent the property if you don't have pets and d
 If you're not a student, you can rent the property if you smoke or have pets, but not if you
 both smoke and also have pets.
 
-
-
 """
+student = input("Are you a student? (y/n) > ")
+pets = input("Do you have pets? (y/n) > ")
+smokes = input("Do you smoke? (y/n) > ")
+
+student = student == "y"
+pets = pets == "y"
+smokes = smokes == "y"
+
+can_rent = (student and (not pets and not smokes)) or (not student and not (pets and smokes))
+
+print("Can rent: " + str(can_rent))
+
