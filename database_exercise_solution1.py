@@ -36,22 +36,41 @@ Until you quit with option 5, the program displays the menu again after every ac
 """
 
 def show_menu():
-    pass
+
+    options = ("Display the database", "Add an item", "Delete an item", "Change an item", "Quit")
+    
+    print()
+    for i in range(0, len(options)):
+        print(str(i + 1) + ": " + options[i])
+    print()
 
 def show_database(db):
-    pass
+    print()
+    for i in range(0, len(db)):
+        print(str(i) + ": " + db[i])
+    print()
 
 def add_item(db):
-    pass
+    item = input("Enter item to add: ")
+    db.append(item)
 
 def change_item(db):
-    pass
+    item_number = input("Enter number of item to change: ")
+    item = input("Enter new item: ")
+
+    db[int(item_number)] = item
 
 def delete_item(db):
-    pass
+    item_number = input("Enter number of item to delete: ")
+    db.pop(int(item_number))
 
 def main():
     db = ["apple", "orange", "mango"]
 
+    show_menu()
     show_database(db)
+    delete_item(db)
+    show_database(db)
+
+main()
 
