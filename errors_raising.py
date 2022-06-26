@@ -1,8 +1,7 @@
 #!./venv/bin/python
 
 def do_greet():
-    #raise KeyError()
-    raise Exception()
+    raise Exception("Not a real key error!")
     greet()
 
 def greet():
@@ -13,12 +12,11 @@ def main():
 
     try:
         do_greet()
-    except ZeroDivisionError:
-        print("Tried to divide by zero!")
-    except KeyError:
-        print("A key error occured")
-    except:
-        print("Some unknown error occurred")
-    
+    except ZeroDivisionError as zde:
+        print(f"Error: {zde}")
+    except KeyError as ke:
+        print(f"Key error: {ke}")
+    except Exception as e:
+        print(f"General error: {e}")
     
 main()
