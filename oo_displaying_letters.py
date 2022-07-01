@@ -1,6 +1,7 @@
 #!./venv/bin/python
 
 import random
+import re
 
 class WordGame:
     def __init__(self, *words):
@@ -37,17 +38,18 @@ class WordGame:
         self._number_guesses += 1
 
     def _show_word(self):
-        # Display the word, BUT:
+        regex = f'[^{"".join(self._guesses)}]'
+        text = re.sub(regex, '-', self._word)
+        text = re.sub(r"(.)", r" \1 ", text)
+        print(text)
 
-        # For any letters that aren't guessed yet, display '-'
-        # For any letters that have been guessed by now, display the letter
-        # Space out all the letters and hyphens; NOT --a--d-, but - - a - - d -
+    def _display_result(self):
         pass
         
 
     def run(self):
-        self._show_word()
         self._choose_word()
+        self._show_word()
         self._guess_letter()
         self._show_word()
         self._guess_letter()
