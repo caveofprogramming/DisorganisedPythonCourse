@@ -1,18 +1,26 @@
 #!./venv/bin/python
 
-class Cat:
-    def __init__(self, name, weight):
-        self._name = name
-        self._weight = weight
+class Person:
+    def __init__(self, age):
+        self.age = age
 
-    def introduce(self):
-        print(f"Hello, my name is {self._name}. I weigh {self._weight:.1f} Kg")
+    def get_age(self):
+        return self._age
+
+    def set_age(self, age):
+
+        if age < 0 or age > 125:
+            raise ValueError(f"Age {age} is out of range")
+        self._age = age
+
+    age = property(fget=get_age, fset=set_age)
 
 def main():
-    cat1 = Cat("Ruffles", 1.2)
-    cat2 = Cat("Tiddles", 1.8)
+    p1 = Person(40)
 
-    cat1.introduce()
-    cat2.introduce()
+    p1.age = 20
+
+    print(p1.get_age())
+
     
 main()
