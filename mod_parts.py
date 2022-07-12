@@ -1,12 +1,10 @@
 #!./venv/bin/python
 
-from game_of_life import App, Cell
+import game_of_life as gol
 
 def main():
-    app = App()
+    app = gol.App()
     app.run()
-
-    cell = Cell(5)
     
 if __name__ == '__main__':
     main()
