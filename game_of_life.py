@@ -102,16 +102,17 @@ class GameCanvas(tk.Canvas):
 
         count = 0
 
-        for rowoffs in range(-1, 2):
-            for coloffs in range(-1, 2):
-                rowpos = (row + rowoffs) % self._rows
-                colpos = (col + coloffs) % self._cols
+        gen = ((x,y) for x in range(-1, 2) for y in range(-1, 2) if not (x ==0 and y == 0))
+    
+        for (rowoffs,coloffs) in gen:
+            rowpos = (row + rowoffs) % self._rows
+            colpos = (col + coloffs) % self._cols
 
-                if rowoffs == 0 and coloffs == 0:
-                    continue
+            if rowoffs == 0 and coloffs == 0:
+                continue
 
-                cell = self._cells[rowpos][colpos]
-                count += cell.get_state()
+            cell = self._cells[rowpos][colpos]
+            count += cell.get_state()
 
         return count
 
