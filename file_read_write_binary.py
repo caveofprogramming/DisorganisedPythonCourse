@@ -1,5 +1,8 @@
 #!./venv/bin/python
 
+# serialization: turn data into a series of bytes
+# deserialization: turn data series of bytes back into a data type
+
 def main():
     filename = "test.bin"
 
