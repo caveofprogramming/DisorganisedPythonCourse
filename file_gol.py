@@ -97,7 +97,7 @@ class GameCanvas(tk.Canvas):
 
     def randomise(self):
 
-        for _ in range(0, 400):
+        for _ in range(0, self._rows * self._cols // 5):
             row = random.choice(self._cells)
             cell = random.choice(row)
             cell.set_state(True)
