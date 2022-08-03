@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 import random
+import pickle
 
 class App(tk.Tk):
     def __init__(self):
@@ -23,12 +24,22 @@ class App(tk.Tk):
         file_menu.add_command(label="Save", command=self.save)
 
     def open(self):
-        file_path = filedialog.askopenfilename(initialfile="test.txt")
-        print(f"'{file_path}'")
+        file_path = filedialog.askopenfilename(initialfile="gol.bin")
+        
+        if not file_path:
+            return
+        
+        with open(file_path, 'rb') as file:
+            self._frame.load(file)
 
     def save(self):
-        file_path = filedialog.asksaveasfilename(initialfile="test.txt")
-        print(f"'{file_path}'")
+        file_path = filedialog.asksaveasfilename(initialfile="gol.bin")
+        
+        if not file_path:
+            return
+        
+        with open(file_path, 'wb') as file:
+            self._frame.save(file)
 
     def run(self):
         self.update()
@@ -75,6 +86,14 @@ class GameCanvas(tk.Canvas):
         self._cells = list()
         self._rows = 0
         self._cols = 0
+
+    def save(self, file):
+        cell_status = [cell.get_state() for row in self._cells for cell in row]
+        pickle.dump(cell_status, file)
+
+    def load(self, file):
+        cell_status = pickle.load(file)
+        [cell.set_state(cell_status.pop(0)) for row in self._cells for cell in row]
 
     def randomise(self):
 
@@ -179,7 +198,11 @@ class MainFrame(ttk.Frame):
         random_button = ttk.Button(self, text="Randomise", command=canvas.randomise)
         random_button.grid(column=2, row=1, sticky=tk.W, padx=5, pady=1)
 
-       
+    def load(self, file):
+        self._canvas.load(file)
+
+    def save(self, file):
+        self._canvas.save(file)   
 
     def update(self):
         self._canvas.draw()
