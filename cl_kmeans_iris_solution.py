@@ -15,49 +15,70 @@ import sklearn.datasets as ds
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+from sklearn.metrics import r2_score
 import pandas as pd
+from itertools import permutations
+import numpy as np
 
-data = ds.load_iris(as_frame=True)
+def find_best_perm(y_true, y_predicted):
+    scores = {}
+    for perm in permutations(range(max(y_true) + 1)):
+        score = r2_score(y_true, np.choose(y_predicted, perm))
+        scores[score] = perm
 
-target = data['target']
-target_names = data['target_names']
+    max_score = max(scores.keys())
+    return scores[max_score]
 
-df = data['data']
-df['species_index'] = target
-df['species'] = target.map(lambda n: target_names[n])
+def main():
 
-X = df.iloc[:,0:4]
-X = StandardScaler().fit_transform(X)
+    data = ds.load_iris(as_frame=True)
 
-model = KMeans(n_clusters=3)
-model.fit(X)
+    target = data['target']
+    target_names = data['target_names']
 
-predicted_target = model.predict(X)
+    df = data['data']
+    df['species_index'] = target
+    df['species'] = target.map(lambda n: target_names[n])
 
-x_label = df.columns[2]
-y_label = df.columns[3]
-x = df[x_label]
-y = df[y_label]
+    X = df.iloc[:,0:4]
+    X = StandardScaler().fit_transform(X)
 
-fig = plt.figure(figsize=(16,9))
+    model = KMeans(n_clusters=3)
+    model.fit(X)
 
-ax = fig.add_subplot(121)
-ax.set_title("True Clusters")
-ax.set_xlabel(x_label)
-ax.set_ylabel(y_label)
-ax.scatter(x, y, c=target, cmap="plasma")
+    predicted_target = model.predict(X)
 
-ax = fig.add_subplot(122)
-ax.set_title("Predicted Clusters")
-ax.set_xlabel(x_label)
-ax.set_ylabel(y_label)
-ax.scatter(x, y, c=predicted_target, cmap="plasma")
+    x_label = df.columns[2]
+    y_label = df.columns[3]
+    x = df[x_label]
+    y = df[y_label]
 
-plt.show()
+    perm = find_best_perm(target, predicted_target)
+    predicted_target = np.choose(predicted_target, perm)
 
-pd.set_option("display.max_rows", 150)
-df_clusters = pd.DataFrame()
-df_clusters['True'] = target
-df_clusters['Predicted'] = predicted_target
+    fig = plt.figure(figsize=(16,9))
 
-print(df_clusters)
+    ax = fig.add_subplot(121)
+    ax.set_title("True Clusters")
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.scatter(x, y, c=target, cmap="plasma")
+
+    ax = fig.add_subplot(122)
+    ax.set_title("Predicted Clusters")
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.scatter(x, y, c=predicted_target, cmap="plasma")
+
+    plt.show()
+
+    pd.set_option("display.max_rows", 150)
+    df_clusters = pd.DataFrame()
+    df_clusters['True'] = target
+    df_clusters['Predicted'] = predicted_target
+
+    print(df_clusters)
+
+    print(r2_score(target, np.choose(predicted_target, perm)))
+
+main()
