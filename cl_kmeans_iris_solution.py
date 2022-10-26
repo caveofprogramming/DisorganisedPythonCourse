@@ -19,6 +19,7 @@ from sklearn.metrics import r2_score
 import pandas as pd
 from itertools import permutations
 import numpy as np
+from sklearn.metrics import normalized_mutual_info_score
 
 def find_best_perm(y_true, y_predicted):
     scores = {}
@@ -80,5 +81,7 @@ def main():
     print(df_clusters)
 
     print(r2_score(target, np.choose(predicted_target, perm)))
+
+    print(normalized_mutual_info_score(target, predicted_target))
 
 main()
