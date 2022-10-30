@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import normalized_mutual_info_score
 
+"""
+linkage / method: ward, complete, average, single
+affinity (similarity) / metric: euclidean, cosine
+"""
+
 class Iris:
     def __init__(self):
         data = ds.load_iris(as_frame=True)
@@ -18,13 +23,13 @@ class Iris:
     def dendrogram(self):
         X = self._df.iloc[:,0:4]
         X = StandardScaler().fit_transform(X)
-        dendrogram(linkage(X), truncate_mode='level', p=3)
+        dendrogram(linkage(X, method='complete', metric='cosine'), truncate_mode='level', p=3)
         plt.show()
 
     def cluster(self):
         X = self._df.iloc[:,0:4]
         X = StandardScaler().fit_transform(X)
-        model = AgglomerativeClustering(n_clusters=3)
+        model = AgglomerativeClustering(n_clusters=3, linkage='complete', affinity='cosine')
         return model.fit_predict(X)
 
     def plot(self, clusters):
@@ -53,7 +58,7 @@ class Iris:
 
 def main():
     iris = Iris()
-    #iris.dendrogram()
+    iris.dendrogram()
     clusters = iris.cluster()
 
     print(clusters)
