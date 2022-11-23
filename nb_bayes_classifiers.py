@@ -32,7 +32,7 @@ def get_common_words(emails):
             frequencies[word] += count
 
     words = dict(sorted(frequencies.items(), reverse=True, key=lambda item: item[1]))
-    common_words = list(words.keys())[:10]
+    common_words = list(words.keys())[:1000]
 
     return common_words
 
@@ -63,7 +63,22 @@ def main():
     words = get_common_words(emails)
 
     X = get_frequencies(emails, words)
+    y = [email['spam'] for email in emails]
 
-    print(X)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, train_size=0.7)
+
+    model = BernoulliNB()
+    model.fit(X_train, y_train)
+
+    y_predicted = model.predict(X_test)
+
+    print(model.__class__)
+    print(accuracy_score(y_test, y_predicted))
+    cm = confusion_matrix(y_test, y_predicted)
+    ConfusionMatrixDisplay(cm).plot()
+
+    plt.show()
+
+
 
 main()
