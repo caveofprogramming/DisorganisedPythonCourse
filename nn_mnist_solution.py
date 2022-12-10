@@ -24,16 +24,18 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 model = Sequential()
-model.add(Dense(1000, input_dim=len(X_train[0]), activation='relu'))
+model.add(Dense(500, input_dim=len(X_train[0]), activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(500, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(len(y_train[0]), activation='softmax'))
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics='accuracy')
 
-model.fit(X_train, y_train, epochs=20, batch_size=128)
+model.fit(X_train, y_train, epochs=20, batch_size=256)
 
-y_predicted = model.predict(X_test)
+#y_predicted = model.predict(X_test)
 
-y_test = np.argmax(y_test, axis=1)
-y_predicted = np.argmax(y_predicted, axis=1)
+loss, accuracy = model.evaluate(X_test, y_test, batch_size=256)
 
-print("Score:", accuracy_score(y_test, y_predicted))
+print(f"Accuracy: {accuracy:.2f}")
